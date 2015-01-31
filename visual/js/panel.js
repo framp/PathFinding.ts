@@ -33,6 +33,11 @@ var Panel = {
         ).attr('id');
         
         switch (selected_header) {
+        
+        case 'thetastar_header':
+
+            finder = new PF.ThetaStarFinder({});
+            break;
 
         case 'astar_header':
             allowDiagonal = typeof $('#astar_section ' +
