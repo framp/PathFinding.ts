@@ -33,11 +33,6 @@ var Panel = {
         ).attr('id');
         
         switch (selected_header) {
-        
-        case 'thetastar_header':
-
-            finder = new PF.ThetaStarFinder({});
-            break;
 
         case 'astar_header':
             allowDiagonal = typeof $('#astar_section ' +
@@ -139,19 +134,23 @@ var Panel = {
             
             finder = new PF.JumpPointFinder({
               trackJumpRecursion: trackRecursion,
-              heuristic: PF.Heuristic[heuristic]
+              heuristic: PF.Heuristic[heuristic],
+              diagonalMovement: PF.DiagonalMovement.IfAtMostOneObstacle
             });
             break;
+
         case 'orth_jump_point_header':
             trackRecursion = typeof $('#orth_jump_point_section ' +
                                      '.track_recursion:checked').val() !== 'undefined';
             heuristic = $('input[name=orth_jump_point_heuristic]:checked').val();
 
-            finder = new PF.OrthogonalJumpPointFinder({
+            finder = new PF.JumpPointFinder({
               trackJumpRecursion: trackRecursion,
-              heuristic: PF.Heuristic[heuristic]
+              heuristic: PF.Heuristic[heuristic],
+              diagonalMovement: PF.DiagonalMovement.Never
             });
             break;
+
         case 'ida_header':
             allowDiagonal = typeof $('#ida_section ' +
                                      '.allow_diagonal:checked').val() !== 'undefined';
@@ -162,7 +161,7 @@ var Panel = {
 
             heuristic = $('input[name=jump_point_heuristic]:checked').val();
 
-            weight = parseInt($('#ida_section input[name=astar_weight]').val()) || 1;
+            weight = parseInt($('#ida_section input[name=ida_weight]').val()) || 1;
             weight = weight >= 1 ? weight : 1; /* if negative or 0, use 1 */
 
             timeLimit = parseInt($('#ida_section input[name=time_limit]').val());
@@ -178,27 +177,16 @@ var Panel = {
               heuristic: PF.Heuristic[heuristic],
               weight: weight
             });
-
             break;
 
-        case 'trace_header':
-            allowDiagonal = typeof $('#trace_section ' +
-                                     '.allow_diagonal:checked').val() !== 'undefined';
-            biDirectional = typeof $('#trace_section ' +
-                                     '.bi-directional:checked').val() !=='undefined';
-            dontCrossCorners = typeof $('#trace_section ' +
-                                     '.dont_cross_corners:checked').val() !=='undefined';
-
-            heuristic = $('input[name=trace_heuristic]:checked').val();
-
-            finder = new PF.TraceFinder({
-                allowDiagonal: allowDiagonal,
-                dontCrossCorners: dontCrossCorners,
-                heuristic: PF.Heuristic[heuristic]
+        case 'thetastar_header':
+            weight = parseFloat($('#thetastar_section input[name=thetastar_weight]').val()) || 1.1;
+            weight = weight >= 1 ? weight : 1; /* if negative or 0, use 1 */
+            
+            finder = new PF.ThetaStarFinder({
+                weight: weight
             });
-
             break;
-
         }
 
         return finder;
