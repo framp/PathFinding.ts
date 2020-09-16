@@ -1,9 +1,9 @@
-var BiAStarFinder = require('./BiAStarFinder');
+import AStarFinder from "./AStarFinder";
 
 /**
- * Bi-direcitional Best-First-Search path-finder.
+ * Best-First-Search path-finder.
  * @constructor
- * @extends BiAStarFinder
+ * @extends AStarFinder
  * @param {object} opt
  * @param {boolean} opt.allowDiagonal Whether diagonal movement is allowed. Deprecated, use diagonalMovement instead.
  * @param {boolean} opt.dontCrossCorners Disallow diagonal movement touching block corners. Deprecated, use diagonalMovement instead.
@@ -11,16 +11,16 @@ var BiAStarFinder = require('./BiAStarFinder');
  * @param {function} opt.heuristic Heuristic function to estimate the distance
  *     (defaults to manhattan).
  */
-function BiBestFirstFinder(opt) {
-    BiAStarFinder.call(this, opt);
+function BestFirstFinder(opt) {
+  AStarFinder.call(this, opt);
 
-    var orig = this.heuristic;
-    this.heuristic = function(dx, dy) {
-        return orig(dx, dy) * 1000000;
-    };
+  var orig = this.heuristic;
+  this.heuristic = function (dx, dy) {
+    return orig(dx, dy) * 1000000;
+  };
 }
 
-BiBestFirstFinder.prototype = new BiAStarFinder();
-BiBestFirstFinder.prototype.constructor = BiBestFirstFinder;
+BestFirstFinder.prototype = new AStarFinder();
+BestFirstFinder.prototype.constructor = BestFirstFinder;
 
-module.exports = BiBestFirstFinder;
+export default BestFirstFinder;
